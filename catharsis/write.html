@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Write Confession</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Write Your Confession</h1>
+        <form action="submit_confession.php" method="post" id="confessionForm">
+            <textarea name="confessionText" placeholder="Type your confession here..." required></textarea>
+            <br>
+            <button type="submit">Submit Confession</button>
+        </form>
+        <div id="confirmationMessage"></div>
+        <a href="index.html">Go back</a>
+
+        <script>
+            document.getElementById('confessionForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Fetch and handle the response from the server
+                fetch('submit_confession.php', {
+                    method: 'POST',
+                    body: new FormData(this)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const confirmationMessage = document.getElementById('confirmationMessage');
+                    confirmationMessage.textContent = data.message;
+
+                    // Redirect to the home page after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>
